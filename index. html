@@ -5,24 +5,51 @@
 <title>Eldoria Noir: 20 Mysteries</title>
 <style>
 body {
-    font-family: fantasy, sans-serif;
+    font-family: 'MedievalSharp', fantasy;
     margin: 0;
     padding: 20px;
-    background-color: #1a1a1a;
+    background-image: url('parchment_bg.jpg'); /* Replace with your parchment image */
+    background-size: cover;
+    background-repeat: no-repeat;
     color: #d0c0a0;
 }
 
 #game-container {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+#gender-selection {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#gender-selection button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    margin: 10px;
+    background-color: #554433;
+    color: #d0c0a0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#gender-selection button:hover {
+    background-color: #776655;
 }
 
 #scene, #clues, #result {
     margin-bottom: 20px;
-    padding: 15px;
-    background-color: #332f2e;
-    border-radius: 5px;
-    border: 1px solid #555;
+    padding: 20px;
+    background-color: rgba(51, 47, 46, 0.8);
+    border-radius: 8px;
+    border: 1px solid #777;
     transition: opacity 0.5s ease-in-out;
     opacity: 1;
 }
@@ -30,40 +57,41 @@ body {
 #scene img {
     max-width: 100%;
     height: auto;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 #choices {
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .choice-button {
-    display: block;
-    width: 90%;
-    padding: 20px;
-    margin: 10px auto;
-    background-color: #443f3e;
+    display: inline-block;
+    width: auto;
+    padding: 15px 25px;
+    margin: 10px;
+    background-color: #665544;
     color: #d0c0a0;
     border: none;
-    border-radius: 10px;
-    font-size: 1.2em;
+    border-radius: 8px;
+    font-size: 1.1em;
     cursor: pointer;
-    touch-action: manipulation;
-    font-family: fantasy, sans-serif;
     transition: background-color 0.3s ease;
 }
 
 .choice-button:hover {
-    background-color: #665f5e;
+    background-color: #887766;
 }
 
 #clues ul {
-    list-style-type: none;
-    padding: 0;
+    list-style-type: disc;
+    padding-left: 20px;
 }
 
 #clues ul li {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
@@ -74,33 +102,42 @@ body {
 }
 
 #save-load button {
-    padding: 15px 25px;
-    margin: 10px;
-    font-size: 1.1em;
+    padding: 12px 20px;
+    margin: 8px;
+    font-size: 1em;
+    background-color: #443322;
+    color: #d0c0a0;
+    border: none;
+    border-radius: 6px;
     cursor: pointer;
-    touch-action: manipulation;
-    font-family: fantasy, sans-serif;
+    transition: background-color 0.3s ease;
 }
+
+#save-load button:hover {
+    background-color: #665544;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 </style>
 </head>
 <body>
 
 <div id="game-container">
     <div id="gender-selection">
-        <h2>Choose Your Gender:</h2>
-        <button onclick="startGame('male')">Male</button>
-        <button onclick="startGame('female')">Female</button>
+        <h2>Choose Your Investigator:</h2>
+        <button onclick="startGame('male')">Male Investigator</button>
+        <button onclick="startGame('female')">Female Investigator</button>
     </div>
     <div id="scene" style="display: none;"></div>
     <div id="choices" style="display: none;"></div>
     <div id="clues" style="display: none;">
-        <h3>Clues:</h3>
+        <h3>Discovered Clues:</h3>
         <ul id="clue-list"></ul>
     </div>
     <div id="result" style="display: none;"></div>
     <div id="save-load" style="display: none;">
-        <button onclick="saveGame()">Save Game</button>
-        <button onclick="loadGame()">Load Game</button>
+        <button onclick="saveGame()">Save Progress</button>
+        <button onclick="loadGame()">Load Progress</button>
     </div>
 </div>
 
@@ -114,27 +151,4 @@ let currentScene = 1;
 let playerGender = null;
 const weapons = ["Enchanted Dagger", "Shadowsteel Sword", "Phoenix Feather Arrow", "Frostbite Staff", "Vial of Basilisk Venom", "Runestone Hammer", "Spectral Chains", "Dragonbone Bow", "Cursed Amulet", "Wand of Whispering Winds", "Goblin Shiv", "Orcish War Axe", "Elven Longsword", "Dwarven Battlehammer", "Necromancer's Scythe", "Lich's Phylactery", "Griffin Talon", "Minotaur Horn", "Medusa's Gaze", "Wraith's Touch", "Crystal Shard", "Obsidian Blade", "Starfire Orb", "Moonstone Dagger", "Sunstone Amulet", "Thunderbolt Wand", "Earthquake Mallet", "Tidal Trident", "Inferno Gauntlets", "Arctic Claws", "Fairy Dust", "Pixie Poison", "Centaur Lance", "Harpy Claws", "Hydra Fang", "Basilisk Scale", "Chimera Breath", "Manticore Tail Spike", "Unicorn Horn", "Gorgon Shield"];
 const magicSpells = ["Fireball", "Ice Storm", "Lightning Bolt", "Teleportation", "Invisibility", "Mind Control", "Summon Familiar", "Healing Touch", "Time Stop", "Spectral Blades", "Earthquake", "Tidal Wave", "Solar Flare", "Lunar Eclipse", "Shadow Walk", "Arcane Missiles", "Polymorph", "Charm", "Confusion", "Disintegrate", "Create Illusions", "Animate Objects", "Blink", "Dimensional Shift", "Enchant Weapon", "Curse", "Drain Life", "Force Field", "Gravity Well", "Astral Projection", "Create Golem", "Conjure Elementals", "Divination", "Energy Drain", "Fear", "Haste", "Imprisonment", "Necrotic Touch", "Portal Creation", "Silence"];
-const outfits = ["Royal Robes", "Shadow Assassin Garb", "Enchanted Plate Armor", "Druid's Verdant Tunic", "Necromancer's Dark Cloak", "Bard's Festive Attire", "Alchemist's Smock", "Sorcerer's Starry Mantle", "Paladin's Shining Armor", "Rogue's Leather Jerkin", "Wizard's Conical Hat and Robes", "Knight's Chainmail", "Cleric's Holy Vestments", "Merchant's Fine Suit", "Explorer's Rugged Gear", "Hunter's Camouflage", "Sailor's Seafaring Outfit", "Farmer's Simple Clothes", "Guard's Uniform", "Jester's Motley", "Courtier's Elegant Gown", "Scholar's Academic Robes", "Monk's Simple Garments", "Barbarian's Fur Armor", "Pirate's Swashbuckler Outfit", "Noble's Rich Attire", "Beggar's Rags", "Dancer's Flowing Dress", "Gladiator's Arena Gear", "Herbalist's Earthy Tunic", "Astronomer's Celestial Robes", "Blacksmith's Leather Apron", "Carpenter's Work Clothes", "Fisherman's Waterproof Gear", "Jeweler's Fine Vest", "Mason's Stone-Dusted Clothes", "Miner's Helmet and Gear", "Potter's Clay-Stained Tunic", "Sculptor's Artistic Smock", "Tailor's Measuring Tape and Clothing", "Weaver's Colorful Threads", "Acrobat's Flexible Costume", "Beekeeper's Protective Suit", "Cartographer's Map-Covered Clothes", "Clockmaker's Precision Tools"];
-
-function generateCharacter(gender) {
-    let firstNames, lastNames;
-    if (gender === 'male') {
-        firstNames = ["Aelar", "Kael", "Thorne", "Draven", "Gideon"];
-        lastNames = ["Shadowbrook", "Fireforge", "Stoneheart", "Ravenwood", "Ironclad"];
-    } else {
-        firstNames = ["Lyra", "Elowen", "Isolde", "Seraphina"];
-        lastNames = ["Moonwhisper", "Nightshade", "Silverleaf", "Stardust"];
-    }
-    const races = ["Elf", "Human", "Dwarf", "Orc", "Goblin", "Fairy", "Centaur", "Minotaur", "Lich", "Wizard"];
-    const professions = ["Mage", "Knight", "Rogue", "Cleric", "Alchemist", "Bard", "Druid", "Necromancer", "Sorcerer", "Paladin"];
-    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-    const race = races[Math.floor(Math.random() * races.length)];
-    const profession = professions[Math.floor(Math.random() * professions.length)];
-    const spell = magicSpells[Math.floor(Math.random() * magicSpells.length)];
-    const outfit = outfits[Math.floor(Math.random() * outfits.length)];
-    return { name: `${firstName} ${lastName} the ${race}`, profession: profession, spell: spell, outfit: outfit };
-}
-
-function generateInvestigation() {
-
+const outfits = ["Royal Robes", "Shadow Assassin Garb", "Enchanted Plate Armor", "Druid's Verdant Tunic", "Necromancer's Dark Cloak", "Bard's Festive Attire", "Alchemist's Smock", "Sorcerer's Starry Mantle", "Paladin's Shining Armor", "Rogue's Leather Jerkin", "Wizard's Conical Hat and Robes", "Knight's Chainmail", "Cleric's Holy Vestments", "Merchant's Fine Suit", "Explorer's Rugged Gear", "Hunter's Camouflage", "Sailor's Seafaring Outfit", "Farmer's Simple Clothes", "Guard's Uniform", "Jester's Motley", "Courtier's Elegant Gown", "Scholar's Academic Robes", "Monk's Simple Garments", "Barbarian's Fur Armor", "Pirate's Swashbuckler Outfit", "Noble's Rich Attire", "Beggar's Rags", "Dancer's Flowing Dress", "Gladiator's Arena Gear", "Herbalist's Earthy Tunic", "Astronomer's Celestial Robes", "Blacksmith's Leather Apron", "Carpenter's Work Clothes", "Fisherman's Waterproof Gear", "Jeweler's Fine Vest", "Mason's Stone-Dusted Clothes", "Miner's Helmet and Gear", "Potter's Clay-Stained Tunic", "Sculptor's Artistic Smock", "Tailor's Measuring Tape and Clothing", "Weaver's Colorful Threads", "Acrobat's Flexible Costume", "Beekeeper's Protective Suit", "Cartographer's Map-Covered Clothes", "Clockmaker's
